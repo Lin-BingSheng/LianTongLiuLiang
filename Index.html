@@ -1,0 +1,71 @@
+<html>
+<head>
+    <meta  charset="utf-8" />
+    <title>1111</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+</head>
+<body>
+    <div>
+        <label>手机号</label>
+        <input type="text" id="mobile" name="mobile" value="" /><br />
+        <label>验证码</label>
+        <input type="text" id="code" name="code" value="" /><br />
+        <button type="button" onclick="SendCode()">发送验证码</button>
+        <button type="button" onclick="GetFlow()">领流量</button>
+        <br />
+        <label class="red">
+            发送验证码最好间隔一分钟
+        </label>
+    </div>
+    <script>
+        function SendCode() {
+            debugger;
+            if ($("#mobile").val().length > 0) {
+                $("#code").val("");
+                var data = { phoneVal: $("#mobile").val(), type: 21 };
+                var settings = {
+                    "url": "https://m.10010.com/god/AirCheckMessage/sendCaptcha",
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    "data": data
+                };
+
+                $.ajax(settings).done(function (response) {
+                    console.log(response);
+                    if (response.RespCode == "0000") {
+                        alert("发送成功");
+                    } else {
+                        alert(response.RespMsg);
+                    }
+                });
+            } else {
+                alert("请输入手机号");
+            }
+
+        }
+        function GetFlow() {
+            debugger;
+            if ($("#mobile").val().length > 0 && $("#code").val().length > 0) {
+                var url = "https://m.10010.com/god/qingPiCard/flowExchange";
+                url += "?number=" + $("#mobile").val() + "&captcha=" + $("#code").val() + "&type=21"
+                var settings = {
+                    "url": url,
+                    "method": "GET",
+                };
+
+                $.ajax(settings).done(function (response) {
+                    console.log(response);
+                    if (response.respCode == "0000") {
+                        alert("领取成功");
+                    }
+                });
+            } else {
+                alert("请输入手机号和验证码");
+            }
+        }
+    </script>
+</body>
+</html>
